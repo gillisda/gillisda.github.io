@@ -1,9 +1,11 @@
 # Technical Screening Test Questions
+
 ## Server Side Questions (C#)
+
 ### Service Side Toubleshooting
  
 ** You have an application that you want to debug, it is not a web site and could be a lot of tasks and threads. What are the various way of debugging the application?**
- 
+x 
  *Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
  
  *Some General Strategies*
@@ -13,7 +15,7 @@
     1. Is it explicit (identified in the code) or implicit?
     2. Is it fatal or non-fatal?
  - Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.
- - If you have alot of tasks and threads use a tool that supports flame graphs, (see example)[https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/]
+ - If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
  - Use some iterative process like an OODA loop, for example:
  >1. Discuss the problem to your peers and brainstorm for what and where to make observations.
  >2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
