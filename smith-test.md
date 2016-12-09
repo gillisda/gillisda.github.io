@@ -10,25 +10,16 @@
  
 *Some General Strategies*
 
-- Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.
+   - Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.  
+   - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience a bug is like a finding a rotten apple in a basket, it is best to to look around for others.  
+   - Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.  
+   - If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)  
+   - Use some iterative process like an OODA loop, for example:
 
-- Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience a bug is like a finding a rotten apple in a basket, it is best to to look around for others.
-
-- It is best to categorize what type of bug it is by asking the following:
-
->1. Is it explicit (identified in the code) or implicit?
->2. Is it fatal or non-fatal?
-
-- Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.
-
-- If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
-
-- Use some iterative process like an OODA loop, for example:
-
->1. Discuss the problem to your peers and brainstorm for what and where to make observations.
->2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
->3. If the bug still can not be reproduced, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code.
->4. If the bug can now be reproduced with test cases, solve it using Visual Studio and deep inspection (breakpoints, watches, etc.), otherwise goto step 1.
+      1. Discuss the problem to your peers and brainstorm for what and where to make observations.
+      2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
+      3. If the bug still can not be reproduced, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code.
+      4. If the bug can now be reproduced with test cases, solve it using Visual Studio and deep inspection (breakpoints, watches, etc.), otherwise goto step 1.
 
 ** For windows services if you want to stop/start a service what are the ways to do it?**
 
