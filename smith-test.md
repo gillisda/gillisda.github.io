@@ -5,35 +5,39 @@
 ### Service Side Toubleshooting
  
 ** You have an application that you want to debug, it is not a web site and could be a lot of tasks and threads. What are the various way of debugging the application?**
-x 
- *Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
  
- *Some General Strategies*
- - Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.
- - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience a bug is like a finding a rotten apple in a basket, it is best to to look around for others.
- - It is best to categorize what type of bug it is by asking the following:
-    1. Is it explicit (identified in the code) or implicit?
-    2. Is it fatal or non-fatal?
- - Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.
- - If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
- - Use some iterative process like an OODA loop, for example:
- >1. Discuss the problem to your peers and brainstorm for what and where to make observations.
- >2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
- >3. If the bug still can not be reproduced, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code.
- >4. If the bug can now be reproduced with test cases, solve it using Visual Studio and deep inspection (breakpoints, watches, etc.), otherwise goto step 1.
+*Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
+ 
+*Some General Strategies*
+- Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.
+- Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience a bug is like a finding a rotten apple in a basket, it is best to to look around for others.
+- It is best to categorize what type of bug it is by asking the following:
+1. Is it explicit (identified in the code) or implicit?
+2. Is it fatal or non-fatal?
+- Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.
+- If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
+- Use some iterative process like an OODA loop, for example:
+>1. Discuss the problem to your peers and brainstorm for what and where to make observations.
+>2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
+>3. If the bug still can not be reproduced, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code.
+>4. If the bug can now be reproduced with test cases, solve it using Visual Studio and deep inspection (breakpoints, watches, etc.), otherwise goto step 1.
 
 ** For windows services if you want to stop/start a service what are the ways to do it?**
+
 There are many ways to start and stop windows service. The code based methods include Powershell (start-service/stop-service), windows C++ code (ServiceStart/ControlService), in managed code (System.ServiceProcess.ServiceController.Start/.Stop), or in a batch file (sc.exe). Perhaps best of all of these might be using [Powershell Desired State Configuration Service resource](https://msdn.microsoft.com/en-us/powershell/dsc/serviceresource). Less recommendable in production is to use the Service Manager user interface.
 
 System orchestration and configuration tooling (e.g. System Center, DCOS) should be used when available to control and track changes. However, for complex distributed systems such as MS SQL, SharePoint, and IIS, you normally do not manage the production services directly, but use the system's provided management tools which in turn manage the services.
 
 ** What is the quickest way of seeing if you are having a memory leak?**
+
 On windows, use [Performance Manager](https://msdn.microsoft.com/en-us/library/windows/hardware/ff541886(v=vs.85).aspx), confirm that you have a memory leak and where (user or kernel side) .
 If you have a managed code memory leak you can use a combination of procdump.exe and Visual Studio (Actions - Debug Managed Memory).
 Otherwise, use ETW tooling to determine where in your program (user side) or os drivers (kernel side) the memory leak is.
 
 ### Anonymous Functions/Delegates
+
 ** Assuming you have the following class, please write a function the computes the circumference of circle (2πr)**
+
  ```cs
    public sealed class Circle {
       private double radius;
@@ -42,13 +46,18 @@ Otherwise, use ETW tooling to determine where in your program (user side) or os 
       }
    }
 ```
+
+Answer:
+
 ```
   var circle = new Circle();
   var circumference = circle.Calculate((r) => 2 * Math.PI * radius);
 ```
+
 This returns the circumference of a circle with given radius of zero. In order to make this more useful, you would want to refactor the class to have a getter and setter for radius, or declare it as public.
 You can use [reflection](http://stackoverflow.com/questions/934930/can-i-change-a-private-readonly-field-in-c-sharp-using-reflection) to change the private field, but this is really bad practice that can undermine code trustworthiness.
 Another unattractive alternative would be to use a extension method that used its own radius, but this also is less desirable because the object's field in now not used.
+
 ```
 public static class CircleExtension
 {
@@ -60,19 +69,23 @@ public static class CircleExtension
 Circle x = new Circle();
 double perimeter = x.SetRadiusAndCalculate(7.5);
 ```
+
 ### Understanding of Threads
 ** Explain Thread deadlock? Assuming you have MVC application what will the following do**
+
 ```cs
    Public void button1Click(object sender, EventArgs e){
       Task<string> s = LoadStringAsync();
       textBox1.Text = s.Result;
    }
 ```
+
 The above code is likely to hang due to a deadlock on the UI thread. Thread deadlock is caused by the code as written because the click handler (outer function) blocks the UI thread waiting for the result, while the inner function that provides the result is likely to use the event bus to ask the blocked UI thread to execute the code. This particular deadly embrace is cool because the code looks so innocent.
 
 This code can be fixed using the `async...await` language construct where the click handler is declared as `async`, and the `s.Result` is replaced with `await s`. At the point of the implicit callback, s is no longer the task, but the string return value.
 
 ** What is wrong with the following code under load**
+
 ```cs
 public static SQLConnection Conn{return "DataSource=.;Initial Catalog=NorthWind;Integrated Security=True";}
 public void ShowFirstTenUsers(){
@@ -86,9 +99,11 @@ public void ShowFirstTenUsers(){
       }
    }
 ```
+
 There seems to be a typo in the declaration of `Conn` where it does not actually create the declared type (SQLConnection). Assuming that is corrected, there is still a problem under load. The declared static connection is probably intended as a performance optimization, but this is not thread safe, and the performance optimization is already accomplished with connection pooling of the underlying SQL driver. As this code is called multiple times in web server backend, for instance, it will likely cause an bug.
 
 **1.How can you improve performance?**
+
 ```
 private static void ShowFirstTenUsers(string connectionString)
 {
@@ -118,12 +133,15 @@ private static void ShowFirstTenUsers(string connectionString)
 }
 ```
 **2.How can you minimize schema change failures**
+
 Instead of using '*' as the field list, use the specific field names that are intended for display.
 
 **3.How can you improve exception handling?**
+
 Depending on your contract with your callers, you can add catch blocks for common exceptions like timeouts.
 
 ### Understanding of Design/Architecture approach
+
 ** You are reading files from a directory and then storing them to a data storage, describe** 
 
 **1.How would you design it? White boarding is fine.**
@@ -135,33 +153,40 @@ Kidding aside...
 **2.What potential IO or Memory bound problems you could encounter.**
 
 **3.How would you solve the add/delete problem of the same folder.**
+
 Assuming that you want a one way sycronization from file system to storage, then
 
 ## Web API Related Questions
 
 ** What is the difference between Get/POST and what implications does it have for SSL**
+
 1. Data. A get requests has a uri, query string, cookies, but no request body. A post includes a request body of arbitrary length, whereas the get request method has a limited length subject to limits (around 1-2Kb). Data on the url query string although encrypted by transport layer security, may be recorded in various ways (e.g. history, plugins) on the client side and on the encryption termination side (device or server), whereas the request body data normally is not. 
 2. Security. The common way to protect against cross site request forgeries is to use a hidden form with a CSRF token which has a limited lifespan. Although it can be done with either get or post, it has implications for the payload size (see Data above), and re-submission (see Caching and Idempotency below). 
 3. Caching. A get response can be cached by the client or server, whereas a post can not be. A network device (e.g. F5 BigIP) or reverse proxy (e.g. nginx) can also cache if it is used for encryption termination or otherwise knows the session encryption keys (like a man-in-the-middle trusted proxy).
 4. Idempotency. A get request can be assumed to be idempotent, whereas with a post, it can not be assumed.
 
 ** Why use JSON over XML? JSON isn’t that much smaller.**
+
 JSON can be preferred over XML in cases that you do not need type a tight schema, or message validation is simple or not required, and your environment components support json. JSON is very easy to use in Browsers and NodeJS environments where is represents a native objects. JSON is easier to read than XML.   
 
 ** Can you write a JSON representation of person object**
+
 ```JSON
 {"name":"Don Gillis", "address":"638 Main", "telephone":"514-887-8100"}
 ```
 
 ** Why does cookie based authentication doesn’t work for an API**
+
 Cookies are a browser technology, so this would limit callers to browsers.
 Composed web applications can have api calls to multiple domains and browsers do not share cookies between domains.
 
 ** How does Google/Facebook authentication work and why is it secure?**
+
 Google and Facebook use OIC (OperID Connect) which in turn uses Oauth 2.0. This is to allow access to "resources" (like facebook) from web clients, native clients (like mobile apps), and headless services like background tasks. It is secure because the "Client" which is working on your behalf does not need to know your credentials and you do not know the "client" resource access credentials. Yet the "client" can provide a fresh token that indicates that you are or were present (depending on the circumstances). The token is generated for a web app in a multistep process where the "client" redirects you to authenticate with the resource with an auth code is given on the URL. The "resource" then verifies or prompts for consent and then redirects you back to a "client" url with the new token as payload. This "client" is usually registered with the resource provider and for web purposes includes a callback URL which further secures usage. Your consent to specific data access is also kept in this registry. All these communications are channel encrypted using TLS.
 
 ## JavaScript Questions
 ** What is the difference and why would you choose one vs. the other.**
+
 ```javascript   
    var sum = function (a, b){ return a+b; }
 ```
