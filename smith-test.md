@@ -38,7 +38,7 @@ Otherwise, use ETW tooling to determine where in your program (user side) or os 
 
 ** Assuming you have the following class, please write a function the computes the circumference of circle (2πr)**
 
- ```cs
+```cs
    public sealed class Circle {
       private double radius;
       public double Calculate(Func<double, double> op)   {
@@ -104,7 +104,7 @@ There seems to be a typo in the declaration of `Conn` where it does not actually
 
 **1.How can you improve performance?**
 
-```
+```cs
 private static void ShowFirstTenUsers(string connectionString)
 {
     string queryString = 
@@ -132,6 +132,7 @@ private static void ShowFirstTenUsers(string connectionString)
     }
 }
 ```
+
 **2.How can you minimize schema change failures**
 
 Instead of using '*' as the field list, use the specific field names that are intended for display.
@@ -206,6 +207,7 @@ The line `callback;` should read `callback(a+b)`.
 
 
 ** Answer the following questions with the snippet**
+
 ```javascript
    var myObject = {
      foo: "bar",
@@ -223,11 +225,15 @@ The line `callback;` should read `callback(a+b)`.
 ```
 
 **1.What will this print?**
-     It is probably intended to demonstrate that the scope of the inner function "this" does not include "foo", whereas using the var self allows access to the outer vars. However it will only execute the outer function and will print:
+
+It is probably intended to demonstrate that the scope of the inner function "this" does not include "foo", whereas using the var self allows access to the outer vars. However it will only execute the outer function and will print:
          outer func: this.foo = bar
          outer func: self.foo = bar 
+
 **2.What bugs do you see?**
-      It was probably intended to execute the inner function as an iife, therefore it should be writen as to cause immediate execution as follows:
+
+It was probably intended to execute the inner function as an iife, therefore it should be writen as to cause immediate execution as follows:
+
 ```javascript
       (function() {
          console.log("inner func:  this.foo = " + this.foo);
@@ -239,9 +245,13 @@ The line `callback;` should read `callback(a+b)`.
 ## Hands-on test
 
 **Write an Angular Review management application which allows you to write review, paginate them and sort them.** 
+
 **You must use:**
+
 **- Services**
+
 **- Some sort of persistence (Local Storage is acceptable)**
+
 **- Write test scenarios using BDD (given/when/test)** 
 
 ITH
