@@ -9,13 +9,20 @@
 *Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
  
 *Some General Strategies*
+
 - Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.
+
 - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience a bug is like a finding a rotten apple in a basket, it is best to to look around for others.
+
 - It is best to categorize what type of bug it is by asking the following:
-1. Is it explicit (identified in the code) or implicit?
-2. Is it fatal or non-fatal?
+
+>1. Is it explicit (identified in the code) or implicit?
+>2. Is it fatal or non-fatal?
+
 - Make reliable observations and then listen carefully to what they are telling you, because too often, we *only* see what we already believe.
+
 - If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
+
 - Use some iterative process like an OODA loop, for example:
 >1. Discuss the problem to your peers and brainstorm for what and where to make observations.
 >2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
@@ -49,7 +56,7 @@ Otherwise, use ETW tooling to determine where in your program (user side) or os 
 
 Answer:
 
-```
+```cs
   var circle = new Circle();
   var circumference = circle.Calculate((r) => 2 * Math.PI * radius);
 ```
@@ -58,7 +65,7 @@ This returns the circumference of a circle with given radius of zero. In order t
 You can use [reflection](http://stackoverflow.com/questions/934930/can-i-change-a-private-readonly-field-in-c-sharp-using-reflection) to change the private field, but this is really bad practice that can undermine code trustworthiness.
 Another unattractive alternative would be to use a extension method that used its own radius, but this also is less desirable because the object's field in now not used.
 
-```
+```cs
 public static class CircleExtension
 {
        public static double SetRadiusAndCalculate(this Circle c, int radius)
@@ -71,6 +78,7 @@ double perimeter = x.SetRadiusAndCalculate(7.5);
 ```
 
 ### Understanding of Threads
+
 ** Explain Thread deadlock? Assuming you have MVC application what will the following do**
 
 ```cs
@@ -166,6 +174,7 @@ Assuming that you want a one way sycronization from file system to storage, then
 3. Caching. A get response can be cached by the client or server, whereas a post can not be. A network device (e.g. F5 BigIP) or reverse proxy (e.g. nginx) can also cache if it is used for encryption termination or otherwise knows the session encryption keys (like a man-in-the-middle trusted proxy).
 4. Idempotency. A get request can be assumed to be idempotent, whereas with a post, it can not be assumed.
 
+
 ** Why use JSON over XML? JSON isn’t that much smaller.**
 
 JSON can be preferred over XML in cases that you do not need type a tight schema, or message validation is simple or not required, and your environment components support json. JSON is very easy to use in Browsers and NodeJS environments where is represents a native objects. JSON is easier to read than XML.   
@@ -200,7 +209,7 @@ vs.
       callback;
    };
 ```
-Answer: The difference (after the fix below is applied), is that one is a sycnonous call and the other is asyncronous. The first is simpler, but the second avoids blocking the javascript UI thread. So if the operation is possibly long running prefer the second, otherwise prefer the simpler code. Although not directly applicable here, an interesting alternative way to avoid not blocking the javascript UI thread is to use [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
+Answer: The difference (after the fix below is applied), is that one is a syncronous call and the other is asyncronous. The first is simpler, but the second avoids blocking the javascript UI thread. So if the operation is possibly long running prefer the second, otherwise prefer the simpler code. Although not directly applicable here, an interesting alternative way to avoid not blocking the javascript UI thread is to use [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
 
 ** What is wrong with this function**
 The line `callback;` should read `callback(a+b)`.
