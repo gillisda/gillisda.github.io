@@ -107,6 +107,7 @@ public void ShowFirstTenUsers(){
          }
       }
    }
+}
 ```
 
 There seems to be a typo in the declaration of `Conn` where it does not actually create the declared type (SQLConnection). Assuming that is corrected, there is still a problem under load. The declared static connection is probably intended as a performance optimization, but this is not thread safe, and the performance optimization is already accomplished with connection pooling of the underlying SQL driver. As this code is called multiple times in web server backend, for instance, it will likely cause an bug.
@@ -210,9 +211,11 @@ vs.
       callback;
    };
 ```
+
 Answer: The difference (after the fix below is applied), is that one is a syncronous call and the other is asyncronous. The first is simpler, but the second avoids blocking the javascript UI thread. So if the operation is possibly long running prefer the second, otherwise prefer the simpler code. Although not directly applicable here, an interesting alternative way to avoid not blocking the javascript UI thread is to use [web workers](https://developer.mozilla.org/en-US/docs/Web/API/Web_Workers_API/Using_web_workers).
 
 ** What is wrong with this function**
+
 The line `callback;` should read `callback(a+b)`.
 
 
@@ -237,12 +240,14 @@ The line `callback;` should read `callback(a+b)`.
 **1.What will this print?**
 
 It is probably intended to demonstrate that the scope of the inner function "this" does not include "foo", whereas using the var self allows access to the outer vars. However it will only execute the outer function and will print:
+
          outer func: this.foo = bar
+
          outer func: self.foo = bar 
 
 **2.What bugs do you see?**
 
-It was probably intended to execute the inner function as an iife, therefore it should be writen as to cause immediate execution as follows:
+It was probably intended to immediately invoke the inner function, therefore it should be writen as to cause immediate execution as follows:
 
 ```javascript
       (function() {
