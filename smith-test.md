@@ -9,7 +9,6 @@
 *Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with a database and native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
  
 *Some General Strategies*
-
    - Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.  
    - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. And in my experience, a bug is like a rotten apple in a basket of apples, it is best to check for others.  
    - Make reliable observations and then listen carefully to what they are telling you -- because too often, we *only* see what we already believe.  
@@ -17,7 +16,6 @@
    - Visual Studio has great debugging tools which can be used to explore code or nail the reproduced problem, but even the remote debugging tools are not normally for use in production. On the other hand ETW can be used in production. 
    - MS SQL Server has great debugging analysis tools as well.
    - Use some iterative process like an OODA loop, for example:
-
       1. Discuss the problem to your peers and brainstorm for what and where to make observations.
       2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW, Dynatrace and New Relic. Other tools like intellitrace and procdump/windbg can help when you can reproduce the problem in production. 
       3. If the bug still can not be understood or reproduced in Dev, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code. This intrumentation would use ETW or other low friction mechanism.
