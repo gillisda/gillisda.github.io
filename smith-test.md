@@ -148,10 +148,10 @@ Depending on the contract with the callers, you can add catch blocks for common 
 
 **1.How would you design it? White boarding is fine.**
 
-In order to allow for many or large file transfers, the function should have two features
+In order to allow for many or large file transfers, the file transfer function should have two features
 - break large files into multiple parts which limits the impact of network failure and allows for parallelism  
 - upload in parallel to increases performance
-Each file could have three steps, initiation, parallel transfer, finalization. Single-part files can be transferred in parallel as well. The initation would divide up the file into parts, initate the transfer and receive an id for the transfer. This id can be used for further control or completion of the transfer. The parallel transfers would be done numbering each and receiving a confirmation number for each part's completion. The finalization request is made by submitting the list of parts and confirmation id's and then the parts are reassembled and completion confirmed. An abort is also possible and will allow the receiving end to clean up incomplete parts. Incomplete transfers can be cleaned up after a set exiry date.
+Each file transfer could have three steps, initiation, parallel transfer, finalization. Single-part files can be transferred in parallel as well. The initation would divide up the file into parts, initate the transfer and receive an id for the transfer. This id can be used for further control or completion of the transfer. The parallel transfers would be done numbering each and receiving a confirmation number for each part's completion. The finalization request is made by submitting the list of parts and confirmation id's and then the parts are reassembled and completion confirmed. An abort is also possible and will allow the receiving end to clean up incomplete parts. Incomplete transfers can be cleaned up after a set exiry date.
 
 **2.What potential IO or Memory bound problems you could encounter.**
 The multi-part strategy limits the effects of network timeouts and other failures.
@@ -159,9 +159,9 @@ This strategy also moderates IO and memory resource use.
 There is a trade-off between the number of parallel threads and various physical resource limits. 
 Assuming normal scale characteristics, I would start with 10-12 parallel uploads.
 
-Building RPC's protocols like this can be very nuanced and requires much testing. It should only be done where characteristics of existing protocols can not be used.  
+Building a protocol like this can be very nuanced and requires much testing. It should only be done where characteristics of existing protocols can not be used.  
 Some alternatives that I use are:  
-1. Use Http/2. Http 1.1 file upload will do both mime-multipart uploads and Http 2.0 will do so with native binary and parallel multiplexing and provides much better results. 
+1. Use Http/2. Http 1.1 file upload will do multipart uploads and Http 2.0 will do so with native binary, parallel multiplexing, and server push. This provides much better results. 
 2. Use Cloud vendor tools. Organize your files and folders, then use cloud vendor tooling for filesystem to cloud-filesystem transfer (and syncronization). Then use a well scaled cloud-local processing to move it to storage. For example, syncronizing a directory with the cloud file system can be as simple as `aws s3 sync . s3://mystoragebucket --recursive`. Then you are left with transferring it to other storage using the cloud providers low latency high bandwidth network and any choice of compute sizing to match the task. This is a good place to use "serverless" technology like AWS Lambda or Azure Functions that can be triggered by file transfer completion.
 3. Use Cloud vendor tooling api. Same as #2, but using your favourite language and an SDK to have deeper integration and control of the process.
 
