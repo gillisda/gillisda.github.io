@@ -24,6 +24,7 @@
 - If you have alot of tasks and threads use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)
 
 - Use some iterative process like an OODA loop, for example:
+
 >1. Discuss the problem to your peers and brainstorm for what and where to make observations.
 >2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW,  Intellitrace, Dynatrace and New Relic. 
 >3. If the bug still can not be reproduced, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code.
