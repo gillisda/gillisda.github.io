@@ -55,19 +55,7 @@ Answer:
 
 This returns the circumference of a circle with given radius of zero. In order to make this more useful, you would want to refactor the class to have a getter and setter for radius, or declare it as public.
 You can use [reflection](http://stackoverflow.com/questions/934930/can-i-change-a-private-readonly-field-in-c-sharp-using-reflection) to change the private field, but this is really bad practice that can undermine code trustworthiness.
-Another unattractive alternative would be to use a extension method that used its own radius, but this also is less desirable because the object's field in now not used:
-
-```cs
-public static class CircleExtension
-{
-       public static double SetRadiusAndCalculate(this Circle c, int radius)
-        {
-            return c.Calculate(y => { return 2 * Math.PI * radius; });
-        }
-}
-Circle x = new Circle();
-double perimeter = x.SetRadiusAndCalculate(7.5);
-```
+Another unattractive alternative would be to use a extension method that used its own radius, but this also is less desirable because the object's field in now not used.
 
 
 ### Understanding of Threads
