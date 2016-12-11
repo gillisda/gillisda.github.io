@@ -16,9 +16,9 @@
    - Visual Studio has great debugging tools which can be used to explore code or nail the reproduced problem, but even the remote debugging tools are not normally for use in production. On the other hand ETW can be used in production.   
    - MS SQL Server has great debugging analysis tools as well.  
    - Use some iterative process like an OODA loop, for example:  
-      1. Discuss the problem to your peers and brainstorm for what and where to make observations.
-      2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW, Dynatrace and New Relic. Other tools like intellitrace and procdump/windbg can help when you can reproduce the problem in production. 
-      3. If the bug still can not be understood or reproduced in Dev, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code. This intrumentation would use ETW or other low friction mechanism.
+      1. Discuss the problem to your peers and brainstorm for what and where to make observations.  
+      2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW, Dynatrace and New Relic. Other tools like intellitrace and procdump/windbg can help when you can reproduce the problem in production.   
+      3. If the bug still can not be understood or reproduced in Dev, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code. This intrumentation would use ETW or other low friction mechanism.  
       4. If the bug can now be reproduced with test cases, solve it using Visual Studio and deep inspection (breakpoints, watches, etc.), otherwise goto step 1.
 
 ** For windows services if you want to stop/start a service what are the ways to do it?**
