@@ -13,9 +13,9 @@
    - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience, a bug is like a rotten apple in a basket of apples, it is best to check around for others.  
    - Make reliable observations and then listen carefully to what they are telling you -- because too often, we *only* see what we already believe.  
    - If you have alot of tasks and threads, use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)  
-   - Visual Studio has great debugging tools which can be used to explore code or nail the reproduced problem, but even the remote debugging tools are not normally for use in production. On the other hand ETW can be used in production. 
-   - MS SQL Server has great debugging analysis tools as well.
-   - Use some iterative process like an OODA loop, for example:
+   - Visual Studio has great debugging tools which can be used to explore code or nail the reproduced problem, but even the remote debugging tools are not normally for use in production. On the other hand ETW can be used in production.   
+   - MS SQL Server has great debugging analysis tools as well.  
+   - Use some iterative process like an OODA loop, for example:  
       1. Discuss the problem to your peers and brainstorm for what and where to make observations.
       2. Make observations using tools like ETW (Event Tracing Windows) related toolsets like xperf, UIforETW, Dynatrace and New Relic. Other tools like intellitrace and procdump/windbg can help when you can reproduce the problem in production. 
       3. If the bug still can not be understood or reproduced in Dev, and assuming that we are able to deploy easily to production, I would consider instrumenting and experimenting the code. This intrumentation would use ETW or other low friction mechanism.
@@ -177,7 +177,7 @@ Assuming that you want a one way sycronization from file system to storage, incl
 1. Data. A get requests has a uri, query string, cookies, but no request body. A post includes a request body of arbitrary length, whereas the get request method has a limited length subject to limits (around 1-2Kb). Data on the url query string although encrypted by transport layer security, may be recorded in various ways (e.g. history, plugins) on the client side and on the encryption termination side (device or server), whereas the request body data normally is not. 
 2. Security. The common way to protect against cross site request forgeries is to use a hidden form with a CSRF token which has a limited lifespan. Although it can be done with either get or post, it has implications for the payload size (see Data above), and re-submission (see Caching and Idempotency below). 
 3. Caching. A get response can be cached by the client or server, whereas a post can not be. A network device (e.g. F5 BigIP) or reverse proxy (e.g. nginx) can also cache if it is used for encryption termination or otherwise knows the session encryption keys (like a man-in-the-middle trusted proxy).
-4. Idempotency. A get request can be assumed to be idempotent, whereas with a post, it can not be assumed.
+4. Idempotency. A get request can be assumed to be idempotent, whereas with a post, it can not be assumed.  
 
 
 ** Why use JSON over XML? JSON isn’t that much smaller.**
