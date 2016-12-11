@@ -9,8 +9,8 @@
 *Ways of debugging the application.* This is a wide subject with many different circumstances, strategies and toolsets. I will assume we are on Windows OS and we have the more difficult situation of not been able to reproduce the problem in Dev. We therefore need to debug the app in **production** at least until we can understand it well enough to reproduce it. Furthermore, we will assume the application is monolithic with a database and native procedure calls as opposed to a distributed app with some rpc method and distributed logs as this requires different approach and toolset.
  
 *Some General Strategies*
-   - Get feedback of your peers. Until you are able to reproduce a problem, debugging is a more creative process that benefits greatly from their input.  
-   - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. And in my experience, a bug is like a rotten apple in a basket of apples, it is best to check for others.  
+   - Get peer feedback. Until you are able to reproduce a problem, debugging is a creative process that benefits greatly from peer input.  
+   - Debugging using StackOverflow is like a depending on a GPS, it can be quick and useful, but tends to reduce our understanding of where we are and how we get to our destination. In my experience, a bug is like a rotten apple in a basket of apples, it is best to check around for others.  
    - Make reliable observations and then listen carefully to what they are telling you -- because too often, we *only* see what we already believe.  
    - If you have alot of tasks and threads, use a tool that supports flame graphs, [see example](https://randomascii.wordpress.com/2016/09/05/etw-flame-graphs-made-easy/)  
    - Visual Studio has great debugging tools which can be used to explore code or nail the reproduced problem, but even the remote debugging tools are not normally for use in production. On the other hand ETW can be used in production. 
@@ -68,6 +68,7 @@ public static class CircleExtension
 Circle x = new Circle();
 double perimeter = x.SetRadiusAndCalculate(7.5);
 ```
+
 
 ### Understanding of Threads
 
@@ -287,4 +288,14 @@ Assuming that foo in not defined in the global/window scope, this will give us t
 
 **- Write test scenarios using BDD (given/when/test)** 
 
-ITH
+Answer:
+
+In an included file (dgReviewManager.zip.renamed) is my Angular 2 App. This is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The README.md file has a longer description of the dev setup.
+
+Rename the file removing the ".renamed", and the unzip it locally. Once unzipped, use `npm i` to install the dependencies, and then `npm start` to start the server. A browser window should open as well, or simply go to `localhost:3000`. 
+
+The test scenarios are included with the source files in a folder called features. A test framework could be achieved with the addition of Protractor & Cucumber.
+
+Thanks,
+Don Gillis
+514-887-8100
