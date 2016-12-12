@@ -140,6 +140,7 @@ Depending on the contract with the callers, you can add catch blocks for common 
 In order to allow for many or large file transfers, the file transfer function should have two features
 - break large files into multiple parts which limits the impact of network failure and allows for parallelism  
 - upload in parallel to increases performance
+
 Each file transfer could have three steps, initiation, parallel transfer, finalization. Single-part files can be transferred in parallel as well. The initation would divide up the file into parts, initate the transfer and receive an id for the transfer. This id can be used for further control or completion of the transfer. The parallel transfers would be done numbering each and receiving a confirmation number for each part's completion. The finalization request is made by submitting the list of parts and confirmation id's and then the parts are reassembled and completion confirmed. An abort is also possible and will allow the receiving end to clean up incomplete parts. Incomplete transfers can be cleaned up after a set exiry date.
 
 **2.What potential IO or Memory bound problems you could encounter.**
@@ -278,7 +279,7 @@ Assuming that foo in not defined in the global/window scope, this will give us t
 
 Answer:
 
-In a this [linked file](http://github.com/gillisda/gillisda.github.io/raw/master/reviewmanager-master.zip) is my Angular 2 App. You may want to right-click and "Save as...". This project is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The included README.md file has a longer description of the dev setup.
+In this [linked file](http://github.com/gillisda/gillisda.github.io/raw/master/reviewmanager-master.zip) is my Angular 2 App. You may want to right-click and "Save as...". This project is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The included README.md file has a longer description of the dev setup.
 
 Download the file, and the unzip it locally. Once unzipped, cd into the folder, and use `npm i` to install the dependencies, and then `npm start` to start the server. A browser window should open as well, or simply go to `localhost:3000`. 
 
