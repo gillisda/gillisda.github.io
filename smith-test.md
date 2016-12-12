@@ -278,11 +278,11 @@ Assuming that foo in not defined in the global/window scope, this will give us t
 
 Answer:
 
-In an included file (dgReviewManager.zip.renamed) is my Angular 2 App. This is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The README.md file has a longer description of the dev setup.
+In a this [linked file](http://github.com/gillisda/gillisda.github.io/dgReviewManager.zip) is my Angular 2 App. This is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The included README.md file has a longer description of the dev setup.
 
-Rename the file removing the ".renamed", and the unzip it locally. Once unzipped, use `npm i` to install the dependencies, and then `npm start` to start the server. A browser window should open as well, or simply go to `localhost:3000`. 
+Download the file, and the unzip it locally. Once unzipped, cd into the folder, and use `npm i` to install the dependencies, and then `npm start` to start the server. A browser window should open as well, or simply go to `localhost:3000`. 
 
-The test scenarios are included with the source files in a folder called features. A test framework could be achieved with the addition of Protractor & Cucumber.
+The test scenarios are included in a folder called features. A test framework could be achieved with the addition of Protractor & Cucumber.
 
 Thanks,
 Don Gillis
