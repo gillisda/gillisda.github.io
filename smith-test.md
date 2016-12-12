@@ -280,7 +280,7 @@ Assuming that foo in not defined in the global/window scope, this will give us t
 
 Answer:
 
-In this [linked file](http://github.com/gillisda/gillisda.github.io/raw/master/reviewmanager-master.zip) is my Angular 2 App. You may want to right-click and "Save as...". This project is developed in a VS Code, NodeJS, Gulp environment based on a starter project. The included README.md file has a longer description of the dev setup.
+In this [linked file](http://github.com/gillisda/gillisda.github.io/raw/master/reviewmanager-master.zip) is my Angular 2 App. You may want to right-click and "Save as...". This project is developed in a VS Code, NodeJS environment based on a starter project. The included README.md file has a longer description of the dev setup.
 
 Download the file, and the unzip it locally. Once unzipped, cd into the folder, and use `npm i` to install the dependencies, and then `npm start` to start the server. A browser window should open as well, or simply go to `localhost:3000`. 
 
